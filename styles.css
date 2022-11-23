@@ -20,8 +20,7 @@ body {
     height: 100vh;
     width: 100vw;
     flex-direction: column;
-
-    overflow: hidden;
+    overflow-x: hidden;
     font-family: 'Inter', sans-serif;
     color: var(--text_normal);
 }
@@ -30,7 +29,6 @@ header {
     background-color: var(--header_background);
     color: var(--primary_color);
     height: 8rem;
-    width: 100%;
     grid-column: span 2;
     display: flex;
     align-items: center;
@@ -44,6 +42,7 @@ main {
 
 h1 {
     margin-left: 10rem;
+    margin-block: 2rem;
     font-size: 3rem;
     text-align: center;
 }
@@ -112,15 +111,17 @@ h1 {
 }
 
 button {
+    --pColor: var(--primary_color);
+    --sColor: var(--main_background);
     aspect-ratio: 1/1;
     height: 3rem;
     border-radius: 50%;
-    border: 2px solid var(--primary_color);
-    color: var(--primary_color);
+    border: 2px solid var(--pColor);
+    color: var(--pColor);
     background-color: transparent;
     cursor: pointer;
 
-    transition: color, background-color 200ms ease-in;
+    transition: color, background-color 100ms ease-in;
 
     font-variation-settings: 'FILL' 0,
     'wght' 700,
@@ -133,8 +134,8 @@ button {
 }
 
 button:hover {
-    color: var(--main_background);
-    background-color: var(--primary_color);
+    color: var(--sColor);
+    background-color: var(--pColor);
     cursor: pointer;
 }
 
@@ -150,6 +151,7 @@ button:hover {
 
 .bookWrapper article {
     aspect-ratio: 4/5;
+    width: 100%;
     background: linear-gradient(45deg,
     var(--primary_color) 0%,
     var(--secondary_color) 45%,
@@ -169,10 +171,21 @@ button:hover {
 
     display: flex;
     flex-flow: column;
+    gap: 1rem;
 }
 
-.content[data-read] {
-    background-color: rgba(0 0 0 / 0.4);
+.bookWrapper article.read {
+    background: linear-gradient(90deg, hsl(145, 48%, 46%) 0%, hsla(150, 61%, 48%, 1) 100%);
+}
+
+.bookWrapper article.read .content {
+    background-color: rgba(10 10 10 / 0.5);
+
+}
+
+article.read button {
+    --pColor: var(--primary_color);
+    --sColor: hsl(145, 48%, 46%);
 }
 
 .content h3 {
@@ -184,15 +197,20 @@ button:hover {
     font-weight: normal;
 }
 
+/*TODO: stop caption from overflowing card*/
 .content p {
     flex: 1;
 }
 
-.content .bottom {
+.content .flex {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     font-size: 2rem;
+}
+
+.content .flex .delete {
+    align-self: flex-start;
 }
 
 @media (max-width: 600px) {
@@ -201,19 +219,49 @@ button:hover {
         width: 100%;
         text-align: center;
         margin-left: 0;
+        margin-block: 1rem;
     }
 
     main {
         flex-direction: column;
     }
 
-    .bookForm {
-        background-color: green;
+    .bookWrapper {
+        grid-template-columns: minmax(200px, 1fr);
     }
 }
 
 @media (min-width: 601px) {
+    h1 {
+        width: 100%;
+        text-align: center;
+        margin-left: 0;
+        margin-block: 1rem;
+    }
+
+    main {
+        flex-direction: column;
+    }
+
+    .bookWrapper {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
+
+@media (min-width: 1001px) {
     main {
         flex-direction: row;
     }
+
+    .bookWrapper {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 10%));
+    }
+
+    h1 {
+        margin-left: 10rem;
+        margin-block: 2rem;
+        text-align: left;
+    }
+
+
 }
