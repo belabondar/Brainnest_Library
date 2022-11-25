@@ -5,8 +5,10 @@ let bookShelf = document.getElementsByClassName("bookWrapper")[0];
 let input = document.getElementsByClassName("bookForm")[0];
 input.addEventListener("submit", addBook);
 
+//library gives us some functions and data to deal with books
 let library = new Library(bookShelf);
 
+//adds a book using the library class
 function addBook(event) {
   event.preventDefault();
   let author = input[0].value;
@@ -14,12 +16,11 @@ function addBook(event) {
   let pages = input[2].value;
   let caption = input[3].value;
   let isRead = input[4].checked;
-  renderBook(library.addBook(title, author, pages, caption, isRead));
+  renderBook(library.createBook(title, author, pages, caption, isRead));
 }
 
-//Had an issue doing this in the library class
-function renderBook(index) {
-  let book = library.books[index];
+//Renders the book and puts it in the DOM
+function renderBook(book) {
   let { title, author, caption, pages, isRead } = book;
 
   let bookCard = document.createElement("article");
@@ -36,7 +37,7 @@ function renderBook(index) {
   deleteButton.classList.add("material-symbols-rounded", "delete");
   deleteButton.innerText = "delete";
   deleteButton.onclick = function () {
-    library.removeBook(index);
+    library.removeBook(book);
   };
 
   let dAuthor = document.createElement("h4");
@@ -53,7 +54,7 @@ function renderBook(index) {
   button.classList.add("material-symbols-rounded");
   button.innerText = isRead ? "close" : "done";
   button.onclick = function () {
-    library.toggleIsRead(index);
+    library.toggleIsRead(book);
   };
 
   top.append(dTitle, deleteButton);
@@ -64,3 +65,5 @@ function renderBook(index) {
   bookShelf.appendChild(bookCard);
   book.setElement(bookCard);
 }
+
+//TODO: Utilise readBooks and openBooks from library to display on page
