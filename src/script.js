@@ -16,7 +16,10 @@ function addBook(event) {
   let pages = input[2].value;
   let caption = input[3].value;
   let isRead = input[4].checked;
-  renderBook(library.createBook(title, author, pages, caption, isRead));
+  let newBook = library.createBook(title, author, pages, caption, isRead);
+  newBook === null
+    ? alert("This book already exists in your library")
+    : renderBook(newBook);
 }
 
 //Renders the book and puts it in the DOM
