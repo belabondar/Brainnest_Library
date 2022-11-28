@@ -22,31 +22,58 @@ export default class Library {
   }
 
   removeBook(book) {
+    let bookIndex = this.findInLibrary(book);
+    if (bookIndex === -1) {
+      return;
+    }
+
     book.isRead ? (this.readBooks -= 1) : (this.openBooks -= 1);
+    this.books.splice(bookIndex, 1);
     this.totalBooks -= 1;
-    book.element.remove();
+    if (book.element) book.element.remove();
   }
 
   inLibrary(book) {
     let compareValues = ["author", "title", "pages"];
 
-    for (let x = 0; x < this.totalBooks; x++) {
-      let matches = 0;
+    for (let x = 0; x < this.books.length; x++) {
       let libraryBook = this.books[x];
-      for (let i = 0; i < compareValues.length; i++) {
-        if (book[compareValues[i]] === libraryBook[compareValues[i]]) {
-          matches += 1;
-        }
-      }
-      if (matches === compareValues.length) {
+      if (this.equalsBookRestricted(libraryBook, book, compareValues))
         return true;
-      }
     }
     return false;
   }
 
+  findInLibrary(book) {
+    for (let x = 0; x < this.totalBooks; x++) {
+      let libraryBook = this.books[x];
+      if (this.equalsBook(libraryBook, book)) {
+        return x;
+      }
+    }
+    return -1;
+  }
+
+  equalsBook(book1, book2) {
+    for (let [key] of Object.entries(book1)) {
+      if (book1[key] !== book2[key]) return false;
+    }
+    return true;
+  }
+
+  equalsBookRestricted(book1, book2, restriction) {
+    for (let key of restriction) {
+      if (book1[key] !== book2[key]) return false;
+    }
+    return true;
+  }
+
   toggleIsRead(book) {
+    if (typeof book.isRead !== "boolean") return;
     book.isRead = !book.isRead;
+
+    //If html element is not set properly
+    if (book.element.classList === undefined) return;
     if (book.isRead) {
       book.element.classList.add("read");
       book.element.getElementsByClassName(
